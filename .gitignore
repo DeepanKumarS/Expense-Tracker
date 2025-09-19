@@ -1,0 +1,21 @@
+# Virtual environment
+env/
+
+# Python cache
+__pycache__/
+*.py[cod]
+
+# SQLite DB
+*.sqlite3
+db.sqlite3
+
+# Django migrations (optional)
+**/migrations/*.py
+**/migrations/*.pyc
+
+# macOS and Windows OS files
+.DS_Store
+Thumbs.db
+
+# VS Code settings (optional)
+.vscode/
