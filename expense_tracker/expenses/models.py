@@ -7,6 +7,7 @@ class Expense(models.Model):
         ('Travel', 'Travel'),
         ('Entertainment', 'Entertainment'),
         ('Utilities', 'Utilities'),
+        ('Sharing','Sharing'),
         ('Other', 'Other'),
     ]
 
@@ -19,7 +20,6 @@ class Expense(models.Model):
 
     def __str__(self):
         return f"{self.title} - {self.amount}"
-    
 # This model captures expenses linked to a user (for multi-user support).
 # Categories help with filtering.
 # DecimalField for accurate money representation.

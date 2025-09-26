@@ -1,11 +1,11 @@
-{% extends 'base.html' %}
+{% extends 'expenses/base.html' %}
 {% block content %}
   <h2>Your Expenses</h2>
   <a href="{% url 'expense_create' %}">Add New Expense</a>
   <ul>
     {% for expense in expenses %}
       <li>
-        {{ expense.date }} - {{ expense.title }}: ${{ expense.amount }} ({{ expense.category }})
+        {{ expense.date }} - {{ expense.title }}: ₹{{ expense.amount }} ({{ expense.category }})
         <a href="{% url 'expense_update' expense.pk %}">Edit</a>
         <a href="{% url 'expense_delete' expense.pk %}">Delete</a>
       </li>
