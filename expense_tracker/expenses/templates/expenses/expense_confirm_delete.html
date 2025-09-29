@@ -1,12 +1,16 @@
 {% extends 'expenses/base.html' %}
 
 {% block content %}
-  <h2>Delete Expense</h2>
-  <p>Are you sure you want to delete the expense: <strong>{{ expense.title }}</strong> ({{ expense.amount }})?</p>
+<div class="flex justify-center items-center min-h-[60vh]">
+    <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md text-center">
+        <h2 class="text-2xl font-bold mb-4 text-red-600">Delete Expense</h2>
+        <p class="mb-6 text-gray-700">Are you sure you want to delete <strong>{{ expense.title }}</strong> (₹{{ expense.amount }})?</p>
 
-  <form method="post">
-    {% csrf_token %}
-    <button type="submit">Yes, Delete</button>
-    <a href="{% url 'expense_list' %}">Cancel</a>
-  </form>
+        <form method="post" class="flex justify-center gap-4">
+            {% csrf_token %}
+            <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition">Yes, Delete</button>
+            <a href="{% url 'expense_list' %}" class="bg-gray-300 text-gray-800 px-4 py-2 rounded hover:bg-gray-400 transition">Cancel</a>
+        </form>
+    </div>
+</div>
 {% endblock %}

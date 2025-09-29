@@ -1,16 +1,28 @@
 {% extends 'expenses/base.html' %}
+
 {% block content %}
-  <h2>Your Expenses</h2>
-  <a href="{% url 'expense_create' %}">Add New Expense</a>
-  <ul>
+<div class="flex justify-between items-center mb-6">
+    <h2 class="text-2xl font-bold">Your Expenses</h2>
+    <a href="{% url 'expense_create' %}" class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 transition">Add Expense</a>
+</div>
+
+<div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
     {% for expense in expenses %}
-      <li>
-        {{ expense.date }} - {{ expense.title }}: ₹{{ expense.amount }} ({{ expense.category }})
-        <a href="{% url 'expense_update' expense.pk %}">Edit</a>
-        <a href="{% url 'expense_delete' expense.pk %}">Delete</a>
-      </li>
+    <div class="bg-white p-4 rounded-lg shadow hover:shadow-lg transition">
+        <h3 class="text-xl font-semibold">{{ expense.title }}</h3>
+        <p class="text-gray-700">Amount: ₹{{ expense.amount }}</p>
+        <p class="text-gray-500">Category: <span class="font-medium">{{ expense.category }}</span></p>
+        <p class="text-gray-500">Date: {{ expense.date }}</p>
+        {% if expense.description %}
+            <p class="text-gray-600 mt-2">{{ expense.description }}</p>
+        {% endif %}
+        <div class="mt-4 flex justify-between">
+            <a href="{% url 'expense_update' expense.pk %}" class="bg-yellow-400 text-white px-3 py-1 rounded hover:bg-yellow-500 transition">Edit</a>
+            <a href="{% url 'expense_delete' expense.pk %}" class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 transition">Delete</a>
+        </div>
+    </div>
     {% empty %}
-      <li>No expenses recorded.</li>
+        <p class="text-gray-600">No expenses added yet. <a href="{% url 'expense_create' %}" class="text-indigo-600 hover:underline">Add one now</a>.</p>
     {% endfor %}
-  </ul>
+</div>
 {% endblock %}
