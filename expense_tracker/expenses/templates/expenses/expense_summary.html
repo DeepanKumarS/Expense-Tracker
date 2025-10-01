@@ -1,0 +1,48 @@
+{% extends 'expenses/base.html' %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto mt-8 p-6 bg-white shadow rounded">
+    <h2 class="text-2xl font-semibold mb-4">Expense Summary</h2>
+
+    <!-- Filter buttons -->
+    <div class="flex gap-2 mb-6">
+        <a href="?filter=daily" class="px-4 py-2 rounded {% if filter_type == 'daily' %}bg-green-500 text-white{% else %}bg-gray-200{% endif %}">Daily</a>
+        <a href="?filter=weekly" class="px-4 py-2 rounded {% if filter_type == 'weekly' %}bg-green-500 text-white{% else %}bg-gray-200{% endif %}">Weekly</a>
+        <a href="?filter=monthly" class="px-4 py-2 rounded {% if filter_type == 'monthly' %}bg-green-500 text-white{% else %}bg-gray-200{% endif %}">Monthly</a>
+        <a href="?filter=yearly" class="px-4 py-2 rounded {% if filter_type == 'yearly' %}bg-green-500 text-white{% else %}bg-gray-200{% endif %}">Yearly</a>
+    </div>
+
+    <!-- Summary Table -->
+    <table class="table-auto border-collapse border border-gray-300 w-full text-left">
+        <thead class="bg-gray-200">
+            <tr>
+                <th class="border border-gray-300 p-2">S.No / Period</th>
+                <th class="border border-gray-300 p-2">Date / Range</th>
+                <th class="border border-gray-300 p-2">Amount (₹)</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for group in grouped_expenses %}
+            <tr class="bg-gray-50 font-semibold">
+                <td class="border border-gray-300 p-2">{{ group.serial }}</td>
+                <td class="border border-gray-300 p-2">{{ group.range }}</td>
+                <td class="border border-gray-300 p-2">₹{{ group.total|floatformat:2 }}</td>
+            </tr>
+            {% for expense in group.expenses %}
+            <tr class="bg-white">
+                <td class="border border-gray-300 p-2"></td>
+                <td class="border border-gray-300 p-2">{{ expense.title }} - {{ expense.category }}</td>
+                <td class="border border-gray-300 p-2">₹{{ expense.amount|floatformat:2 }}</td>
+            </tr>
+            {% endfor %}
+            {% endfor %}
+            
+            <!-- Final total -->
+            <tr class="bg-red-100 font-bold">
+                <td class="border border-gray-300 p-2" colspan="2">Grand Total</td>
+                <td class="border border-gray-300 p-2 text-red-600">₹{{ total_amount|floatformat:2 }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+{% endblock %}
