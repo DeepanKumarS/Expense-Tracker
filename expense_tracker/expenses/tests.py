@@ -91,14 +91,4 @@ class ExpenseViewsTest(TestCase):
         self.assertEqual(Expense.objects.filter(user=self.user).count(), 2)
 
 
-# run all tests
-# python manage.py test
-
-# # run tests only for expenses app (faster)
-# python manage.py test expenses
-
-# # run a single test class or method (very useful for debugging)
-# python manage.py test expenses.tests.ExpenseViewsTest.test_expense_create_view
-
-# # increase verbosity if you want more output
-# python manage.py test -v 2
+# Test execution instructions have been moved to the project README for clarity.

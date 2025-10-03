@@ -1,9 +1,12 @@
+import logging
 from django.db.models.signals import pre_save, post_save
 from django.dispatch import receiver
 from django.utils.timezone import now
 from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
 from .models import Expense, Profile
+
+logger = logging.getLogger(__name__)
 
 
 # ---------------- Expense signals ----------------
@@ -30,7 +33,7 @@ def auto_categorize(sender, instance, **kwargs):
 @receiver(post_save, sender=Expense)
 def notify_expense_added(sender, instance, created, **kwargs):
     if created:
-        print(f"💰 New expense added: {instance.title} - ₹{instance.amount}")
+        logger.info(f"💰 New expense added: {instance.title} - ₹{instance.amount}")
 
 
 # ---------------- Profile signals ----------------
@@ -39,7 +42,7 @@ def notify_expense_added(sender, instance, created, **kwargs):
 def create_profile(sender, instance, created, **kwargs):
     if created:
         Profile.objects.create(user=instance)
-        print(f"👤 Profile created for {instance.username}")
+        logger.info(f"👤 Profile created for {instance.username}")
 
 @receiver(post_save, sender=User)
 def save_profile(sender, instance, **kwargs):

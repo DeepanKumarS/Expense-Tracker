@@ -71,82 +71,85 @@ def expense_delete(request, pk):
         return redirect('expense_list')
     return render(request, 'expenses/expense_confirm_delete.html', {'expense': expense})
 
-
-
 @login_required
 def expense_summary(request):
     filter_type = request.GET.get('filter', 'daily')
-    user_expenses = Expense.objects.filter(user=request.user).order_by('date')
-
     grouped_expenses = []
-    total_amount = user_expenses.aggregate(total=Sum('amount'))['total'] or 0
+    total_amount = Expense.objects.filter(user=request.user).aggregate(total=Sum('amount'))['total'] or 0
 
     if filter_type == 'daily':
-        daily_dict = defaultdict(list)
-        for e in user_expenses:
-            key = e.date
-            daily_dict[key].append(e)
-
-        for i, (day, expenses) in enumerate(sorted(daily_dict.items()), 1):
-            group_total = sum(exp.amount for exp in expenses)
+        qs = (
+            Expense.objects.filter(user=request.user)
+            .annotate(day=TruncDay('date'))
+            .values('day')
+            .annotate(total=Sum('amount'))
+            .order_by('day')
+        )
+        for i, group in enumerate(qs, 1):
+            expenses = Expense.objects.filter(user=request.user, date=group['day'])
             grouped_expenses.append({
                 'serial': f"D{i}",
-                'range': day.strftime('%d-%m-%Y'),
-                'total': group_total,
+                'range': group['day'].strftime('%d-%m-%Y'),
+                'total': group['total'],
                 'expenses': expenses
             })
 
     elif filter_type == 'weekly':
-        weekly_dict = defaultdict(list)
-        for e in user_expenses:
-            year, week_num, _ = e.date.isocalendar()
-            key = (year, week_num)
-            weekly_dict[key].append(e)
-
-        for i, ((year, week_num), expenses) in enumerate(sorted(weekly_dict.items()), 1):
-            # Calculate week start and end dates
-            week_start = min(exp.date for exp in expenses)
-            week_end = max(exp.date for exp in expenses)
-            group_total = sum(exp.amount for exp in expenses)
+        qs = (
+            Expense.objects.filter(user=request.user)
+            .annotate(week=TruncWeek('date'))
+            .values('week')
+            .annotate(total=Sum('amount'))
+            .order_by('week')
+        )
+        for i, group in enumerate(qs, 1):
+            week_start = group['week']
+            week_end = week_start + timedelta(days=6)
+            expenses = Expense.objects.filter(user=request.user, date__gte=week_start, date__lte=week_end)
             grouped_expenses.append({
                 'serial': f"W{i}",
                 'range': f"{week_start.strftime('%d-%m-%Y')} to {week_end.strftime('%d-%m-%Y')}",
-                'total': group_total,
+                'total': group['total'],
                 'expenses': expenses
             })
 
     elif filter_type == 'monthly':
-        monthly_dict = defaultdict(list)
-        for e in user_expenses:
-            key = (e.date.year, e.date.month)
-            monthly_dict[key].append(e)
-
-        for i, ((year, month), expenses) in enumerate(sorted(monthly_dict.items()), 1):
-            month_start = min(exp.date for exp in expenses)
-            month_end = max(exp.date for exp in expenses)
-            group_total = sum(exp.amount for exp in expenses)
-            month_name = calendar.month_name[month]
+        qs = (
+            Expense.objects.filter(user=request.user)
+            .annotate(month=TruncMonth('date'))
+            .values('month')
+            .annotate(total=Sum('amount'))
+            .order_by('month')
+        )
+        for i, group in enumerate(qs, 1):
+            month_start = group['month']
+            last_day = calendar.monthrange(month_start.year, month_start.month)[1]
+            month_end = month_start.replace(day=last_day)
+            expenses = Expense.objects.filter(user=request.user, date__year=month_start.year, date__month=month_start.month)
+            month_name = calendar.month_name[month_start.month]
             grouped_expenses.append({
                 'serial': f"M{i}",
                 'range': f"{month_start.strftime('%d-%m-%Y')} to {month_end.strftime('%d-%m-%Y')}",
-                'total': group_total,
+                'total': group['total'],
                 'expenses': expenses
             })
 
     elif filter_type == 'yearly':
-        yearly_dict = defaultdict(list)
-        for e in user_expenses:
-            key = e.date.year
-            yearly_dict[key].append(e)
-
-        for i, (year, expenses) in enumerate(sorted(yearly_dict.items()), 1):
-            year_start = min(exp.date for exp in expenses)
-            year_end = max(exp.date for exp in expenses)
-            group_total = sum(exp.amount for exp in expenses)
+        qs = (
+            Expense.objects.filter(user=request.user)
+            .annotate(year=TruncYear('date'))
+            .values('year')
+            .annotate(total=Sum('amount'))
+            .order_by('year')
+        )
+        for i, group in enumerate(qs, 1):
+            year_start = group['year']
+            year_end = year_start.replace(month=12, day=31)
+            expenses = Expense.objects.filter(user=request.user, date__year=year_start.year)
             grouped_expenses.append({
                 'serial': f"Y{i}",
                 'range': f"{year_start.strftime('%d-%m-%Y')} to {year_end.strftime('%d-%m-%Y')}",
-                'total': group_total,
+                'total': group['total'],
                 'expenses': expenses
             })
 

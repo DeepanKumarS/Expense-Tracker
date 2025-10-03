@@ -7,7 +7,7 @@ class Expense(models.Model):
         ('Travel', 'Travel'),
         ('Entertainment', 'Entertainment'),
         ('Utilities', 'Utilities'),
-        ('Sharing','Sharing'),
+        ('Sharing', 'Sharing'),
         ('Other', 'Other'),
     ]
 
