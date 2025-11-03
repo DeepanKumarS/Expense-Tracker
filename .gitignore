@@ -19,3 +19,6 @@ Thumbs.db
 
 # VS Code settings (optional)
 .vscode/
+
+//
+expenses/models/*.pkl
