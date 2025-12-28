@@ -7,8 +7,8 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
 from django.db.models import Sum
 from django.db.models.functions import TruncDay, TruncWeek, TruncMonth, TruncYear
-from .models import Expense
-from .forms import ExpenseForm
+from .models import Expense, Profile
+from .forms import ExpenseForm, ProfileForm
 from .chatbot_utils import process_chat_query
 import calendar
 from django.db import IntegrityError, transaction
@@ -29,7 +29,6 @@ def signup(request):
     else:
         form = UserCreationForm()
     return render(request, 'expenses/signup.html', {'form': form})
-
 
 class CustomLoginView(LoginView):
     template_name = 'expenses/login.html'
@@ -89,6 +88,25 @@ def chatbot_view(request):
         response = process_chat_query(request.user, user_query)
         return JsonResponse({"response": response})
     return render(request, "expenses/chatbot.html")
+
+
+@login_required
+def profile_view(request):
+    profile = getattr(request.user, 'profile', None)
+    return render(request, 'expenses/profile.html', {'profile': profile})
+
+
+@login_required
+def profile_edit(request):
+    profile = getattr(request.user, 'profile', None)
+    if request.method == 'POST':
+        form = ProfileForm(request.POST, request.FILES, instance=profile)
+        if form.is_valid():
+            form.save()
+            return redirect('profile')
+    else:
+        form = ProfileForm(instance=profile)
+    return render(request, 'expenses/profile_edit.html', {'form': form, 'profile': profile})
 
 
 @login_required
