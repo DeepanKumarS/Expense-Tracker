@@ -1,0 +1,29 @@
+{% extends 'expenses/base.html' %}
+
+{% block content %}
+<div class="max-w-xl mx-auto bg-white p-6 rounded shadow">
+  <h2 class="text-lg font-semibold mb-4">Edit Profile</h2>
+  <form method="post" enctype="multipart/form-data" class="space-y-4">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+    <div>
+      <label class="block text-sm font-medium">Bio</label>
+      {{ form.bio }}
+    </div>
+    <div>
+      <label class="block text-sm font-medium">Profile picture</label>
+      {% if profile and profile.profile_pic %}
+        <div class="mb-2">
+          <img src="{{ profile.profile_pic.url }}" alt="current avatar" class="w-24 h-24 rounded-full object-cover border">
+        </div>
+      {% endif %}
+      {{ form.profile_pic }}
+      <p class="text-xs text-gray-500 mt-1">Accepted formats: JPG, PNG. Max size depends on server settings.</p>
+    </div>
+    <div class="flex gap-3 mt-4">
+      <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700">Save</button>
+      <a href="{% url 'profile' %}" class="text-gray-600 hover:underline">Cancel</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

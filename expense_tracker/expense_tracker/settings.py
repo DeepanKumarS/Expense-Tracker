@@ -1,17 +1,16 @@
 from pathlib import Path
-import os
-
-# Try to use decouple for environment variables, fall back to os.environ
-try:
-    from decouple import config
-    SECRET_KEY = config('SECRET_KEY', default='django-insecure-temp-key-change-in-production')
-    DEBUG = config('DEBUG', default=True, cast=bool)
-except ImportError:
-    SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-temp-key-change-in-production')
-    DEBUG = os.environ.get('DEBUG', 'True') == 'True'
+from decouple import config  # <-- add this
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = config('SECRET_KEY')
+
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = config('DEBUG', default=True, cast=bool)
+
+ALLOWED_HOSTS = []
 
 # Application definition
 INSTALLED_APPS = [
@@ -21,8 +20,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'rest_framework',
-    'django_filters',
     'expenses',
 ]
 
@@ -79,22 +76,4 @@ USE_I18N = True
 USE_TZ = True
 
 STATIC_URL = 'static/'
-
-# Django REST Framework configuration
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.SessionAuthentication',
-    ],
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated',
-    ],
-    'DEFAULT_FILTER_BACKENDS': [
-        'django_filters.rest_framework.DjangoFilterBackend',
-        'rest_framework.filters.OrderingFilter',
-        'rest_framework.filters.SearchFilter',
-    ],
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 20,
-    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
-}
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

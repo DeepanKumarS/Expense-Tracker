@@ -1,7 +1,34 @@
-asgiref==3.9.1
+# Core Django Dependencies
 Django==5.2.6
+djangorestframework==3.16.1
+django-filter==25.2
+
+# Database
 sqlparse==0.5.3
-tzdata==2025.2
-scikit-learn==1.5.1
-joblib==1.4.2
+
+# Utilities
 python-decouple==3.8
+Pillow==11.3.0
+asgiref==3.9.1
+tzdata==2025.2
+
+# Machine Learning (AI Features)
+scikit-learn==1.7.2
+joblib==1.5.2
+numpy==2.3.3
+scipy==1.16.2
+
+# Development & Testing
+pytest==9.0.2
+pytest-django==4.11.1
+pytest-cov==7.0.0
+black==24.1.1
+flake8==7.1.1
+isort==5.13.2
+
+# Production Server
+gunicorn==21.2.0
+whitenoise==6.7.0
+
+# Optional: PostgreSQL support
+psycopg2-binary==2.9.10

@@ -13,8 +13,4 @@ urlpatterns = [
 
     # Include app URLs
     path('', include('expenses.urls')),
-    
-    # API URLs
-    path('api/', include('expenses.api_urls')),
-    path('api-auth/', include('rest_framework.urls')),
 ]
