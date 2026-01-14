@@ -69,18 +69,42 @@
 
     <div class="flex flex-1">
         <!-- Left Sidebar -->
-        <div id="nav-sidebar" class="w-0 bg-gray-300 shadow-lg overflow-hidden transition-all duration-300 ease-in-out">
-            <div class="p-6 w-64">
-                <nav class="space-y-2">
-                    <a href="{% url 'expense_list' %}" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-indigo-100 text-gray-700 hover:text-indigo-600 transition font-semibold">
-                        <span class="text-2xl">🏠</span>
-                        <span>Home</span>
+        <div id="nav-sidebar" class="w-0 bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 shadow-2xl overflow-hidden transition-all duration-300 ease-in-out border-r border-gray-700">
+            <div class="p-4 w-64 h-full flex flex-col">
+                <!-- Sidebar Header -->
+                <div class="mb-8 pb-4 border-b border-gray-700">
+                    <h2 class="text-white font-bold text-lg flex items-center gap-2">
+                        <svg class="w-5 h-5 text-indigo-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z"></path>
+                        </svg>
+                        Menu
+                    </h2>
+                </div>
+
+                <!-- Navigation -->
+                <nav class="space-y-3 flex-1">
+                    <a href="{% url 'expense_list' %}" class="flex items-center gap-4 px-4 py-3 rounded-xl text-gray-300 hover:text-white hover:bg-indigo-600 hover:shadow-lg transition-all duration-200 group">
+                        <svg class="w-5 h-5 text-indigo-400 group-hover:text-white transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-3m0 0l7-4 7 4M5 9v10a1 1 0 001 1h12a1 1 0 001-1V9m-9 16l-7-4m0 0l7 4m0-4l7-4"></path>
+                        </svg>
+                        <span class="font-medium text-sm">Home</span>
                     </a>
-                    <a href="{% url 'expense_summary' %}" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-indigo-100 text-gray-700 hover:text-indigo-600 transition font-semibold">
-                        <span class="text-2xl">📊</span>
-                        <span>Summary</span>
+
+                    <a href="{% url 'expense_summary' %}" class="flex items-center gap-4 px-4 py-3 rounded-xl text-gray-300 hover:text-white hover:bg-purple-600 hover:shadow-lg transition-all duration-200 group">
+                        <svg class="w-5 h-5 text-purple-400 group-hover:text-white transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                        </svg>
+                        <span class="font-medium text-sm">Summary</span>
                     </a>
                 </nav>
+
+                <!-- Sidebar Footer -->
+                <div class="pt-4 border-t border-gray-700 mt-auto">
+                    <div class="text-xs text-gray-500 px-4 py-2 bg-gray-800 rounded-lg">
+                        <p class="font-semibold text-gray-400 mb-1">Quick Tips</p>
+                        <p>Click a link to navigate</p>
+                    </div>
+                </div>
             </div>
         </div>
 
