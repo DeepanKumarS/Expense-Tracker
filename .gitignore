@@ -1,6 +1,11 @@
 # Virtual environment
 env/
 
+# Environment variables (secrets - never commit)
+.env
+.env.local
+.env.*.local
+
 # Python cache
 __pycache__/
 *.py[cod]
