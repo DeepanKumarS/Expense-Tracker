@@ -11,7 +11,7 @@ class UserSerializer(serializers.ModelSerializer):
     """Serialize User model for API responses."""
     class Meta:
         model = User
-        fields = ['id', 'username', 'email', 'first_name', 'last_name']
+        fields = ['id', 'username']
         read_only_fields = ['id']
 
 
@@ -31,16 +31,12 @@ class ExpenseSerializer(serializers.ModelSerializer):
     Validates category, amount, and date fields.
     """
     user = UserSerializer(read_only=True)
-    category_display = serializers.SerializerMethodField()
     
     class Meta:
         model = Expense
-        fields = ['id', 'user', 'title', 'amount', 'category', 'category_display', 'date', 'description']
+        fields = ['id', 'user', 'title', 'amount', 'category', 'date', 'description']
         read_only_fields = ['id', 'user']
     
-    def get_category_display(self, obj):
-        """Return human-readable category name."""
-        return obj.get_category_display()
     
     def validate_amount(self, value):
         """Ensure amount is positive."""
@@ -56,14 +52,11 @@ class ExpenseSerializer(serializers.ModelSerializer):
 
 class ExpenseListSerializer(serializers.ModelSerializer):
     """Lightweight serializer for expense lists (less data)."""
-    category_display = serializers.SerializerMethodField()
     
     class Meta:
         model = Expense
-        fields = ['id', 'title', 'amount', 'category', 'category_display', 'date']
+        fields = ['id', 'title', 'amount', 'category', 'date']
     
-    def get_category_display(self, obj):
-        return obj.get_category_display()
 
 
 class ExpenseDetailSerializer(ExpenseSerializer):

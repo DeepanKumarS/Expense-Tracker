@@ -61,8 +61,12 @@ WSGI_APPLICATION = 'expense_tracker.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'expense_tracker',
+        'USER': 'postgres',
+        'PASSWORD': 'postgre',
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
 
@@ -98,3 +102,38 @@ REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
 }
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# ... all your other settings like DATABASES, INSTALLED_APPS, MIDDLEWARE ...
+# Media files (for profile_pic uploads)
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
+
+# End of settings.py
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
+            'style': '{',
+        },
+        'simple': {
+            'format': '{levelname} - {message}',
+            'style': '{',
+        },
+    },
+
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose',
+        },
+    },
+
+    'root': {
+        'handlers': ['console'],
+        'level': 'DEBUG',
+    },
+}
+

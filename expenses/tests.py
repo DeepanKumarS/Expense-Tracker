@@ -25,6 +25,7 @@ class ExpenseModelTest(TestCase):
 
     def test_str_representation(self):
         self.assertIn("Groceries", str(self.expense))
+        print(str(self.expense))
         self.assertIn("100.50", str(self.expense))
 
 

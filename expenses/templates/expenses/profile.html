@@ -10,7 +10,7 @@
     {% endif %}
     <div>
       <h2 class="text-xl font-semibold">{{ request.user.get_full_name|default:request.user.username }}</h2>
-      <p class="text-sm text-gray-600">{{ request.user.email }}</p>
+      <!-- Email removed: not used in model or UI -->
     </div>
   </div>
 

@@ -16,12 +16,10 @@ class TestExpenseAPI:
         self.client = APIClient()
         self.user = User.objects.create_user(
             username='testuser',
-            email='test@example.com',
             password='testpass123'
         )
         self.other_user = User.objects.create_user(
             username='otheruser',
-            email='other@example.com',
             password='testpass123'
         )
         self.client.force_authenticate(user=self.user)
@@ -194,7 +192,6 @@ class TestProfileAPI:
         self.client = APIClient()
         self.user = User.objects.create_user(
             username='testuser',
-            email='test@example.com',
             password='testpass123'
         )
         self.client.force_authenticate(user=self.user)
@@ -223,7 +220,6 @@ class TestExpenseModel:
         """Set up test user"""
         self.user = User.objects.create_user(
             username='testuser',
-            email='test@example.com',
             password='testpass123'
         )
     
@@ -271,7 +267,6 @@ class TestProfileModel:
         """Test that profile is created when user is created"""
         user = User.objects.create_user(
             username='testuser',
-            email='test@example.com',
             password='testpass123'
         )
         assert hasattr(user, 'profile')

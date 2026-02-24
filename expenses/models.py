@@ -26,8 +26,8 @@ class Profile(models.Model):
     bio = models.TextField(blank=True, null=True)
     profile_pic = models.ImageField(upload_to='profile_pics/', blank=True, null=True)
 
-    def __str__(self):
-        return f"{self.user.username}'s Profile"
+    # def __str__(self):
+    #     return f"{self.user.username}'s Profile"
 # This model captures expenses linked to a user (for multi-user support).
 # Categories help with filtering.
 # DecimalField for accurate money representation.

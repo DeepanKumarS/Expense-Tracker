@@ -3,6 +3,8 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.http import JsonResponse
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
+from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
 from django.db.models import Sum
@@ -16,6 +18,7 @@ from django.db import IntegrityError, transaction
 from .ai_utils import predict_category
 
 def signup(request):
+    form = UserCreationForm()
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
         if form.is_valid():
@@ -27,8 +30,7 @@ def signup(request):
             else:
                 messages.success(request, "Account created successfully! Please log in.")
                 return redirect('login')
-    else:
-        form = UserCreationForm()
+  
     return render(request, 'expenses/signup.html', {'form': form})
 
 class CustomLoginView(LoginView):
@@ -59,13 +61,14 @@ def expense_create(request):
         if form.is_valid():
             expense = form.save(commit=False)
             expense.user = request.user
-            if not expense.category or expense.category == 'Other':
+            # Always predict category if not provided
+            if not expense.category:
                 predicted = predict_category((expense.title or '') + ' ' + (expense.description or ''))
-                        # give user a small message for debugging/feedback
-                if predicted:
-                    # apply predicted category
+                if predicted and predicted != 'Other':
                     expense.category = predicted
                     messages.info(request, f"Predicted category: {predicted}")
+                else:
+                    expense.category = 'Other'
             expense.save()
             return redirect('expense_list')
     return render(request, 'expenses/expense_form.html', {'form': form})
@@ -117,6 +120,27 @@ def profile_edit(request):
     else:
         form = ProfileForm(instance=profile)
     return render(request, 'expenses/profile_edit.html', {'form': form, 'profile': profile})
+
+@login_required
+def password_change(request):
+    from django.contrib.auth.forms import PasswordChangeForm
+    from django.contrib.auth import update_session_auth_hash
+
+    if request.method == 'POST':
+        form = PasswordChangeForm(user=request.user, data=request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)  # Important!
+            messages.success(request, 'Your password was successfully updated!')
+            return redirect('profile')
+    else:
+        form = PasswordChangeForm(user=request.user)
+    # Split help_text into lines for each field
+    for field in form.fields.values():
+        if field.help_text:
+            field.help_text_lines = [s.strip() + ('.' if not s.strip().endswith('.') else '') for s in field.help_text.split('. ') if s.strip()]
+    return render(request, 'expenses/password_change.html', {'form': form})
+        
 
 
 @login_required

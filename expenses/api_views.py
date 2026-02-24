@@ -11,18 +11,9 @@ from django.db.models import Sum, Count
 from datetime import datetime, timedelta
 
 from .models import Expense, Profile
-from .serializers import (
-    ExpenseSerializer, ExpenseListSerializer, ExpenseDetailSerializer,
-    ProfileSerializer, UserSerializer
-)
+from .serializers import (ExpenseSerializer, ExpenseListSerializer, ExpenseDetailSerializer,
+    ProfileSerializer, UserSerializer)
 
-
-class IsOwner:
-    """
-    Custom permission to check if user owns the expense/profile.
-    """
-    def has_object_permission(self, request, view, obj):
-        return obj.user == request.user
 
 
 class ExpenseViewSet(viewsets.ModelViewSet):
@@ -173,3 +164,17 @@ class ProfileViewSet(viewsets.ModelViewSet):
         profile = request.user.profile
         serializer = self.get_serializer(profile)
         return Response(serializer.data)
+
+    @action(detail=False, methods=['post'], permission_classes=[IsAuthenticated])
+    def change_password(self, request):
+        """Allow user to change their password via API."""
+        user = request.user
+        old_password = request.data.get('old_password')
+        new_password = request.data.get('new_password')
+        if not user.check_password(old_password):
+            return Response({'detail': 'Old password is incorrect.'}, status=status.HTTP_400_BAD_REQUEST)
+        if not new_password or len(new_password) < 8:
+            return Response({'detail': 'New password must be at least 8 characters.'}, status=status.HTTP_400_BAD_REQUEST)
+        user.set_password(new_password)
+        user.save()
+        return Response({'detail': 'Password changed successfully.'}, status=status.HTTP_200_OK)

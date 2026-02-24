@@ -21,7 +21,7 @@ class ExpenseForm(forms.ModelForm):
             }),
             'category': forms.Select(attrs={
                 'class': 'w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition bg-white',
-                'required': True,
+                # 'required': True,  # Remove required attribute
             }),
             'date': forms.DateInput(attrs={
                 'type': 'date',
@@ -37,6 +37,8 @@ class ExpenseForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        # Make category not required in the form
+        self.fields['category'].required = False
         # Add labels
         self.fields['title'].label = 'Expense Title'
         self.fields['amount'].label = 'Amount ($)'

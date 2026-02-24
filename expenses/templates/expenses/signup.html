@@ -21,16 +21,7 @@
                 {% endif %}
             </div>
 
-            <!-- Email Field (if included in your form) -->
-            {% if form.email %}
-            <div class="space-y-2">
-                <label for="{{ form.email.id_for_label }}" class="block text-sm text-gray-700 font-semibold">Email</label>
-                <input type="email" name="email" value="{{ form.email.value }}" class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-600">
-                {% if form.email.errors %}
-                    <p class="text-red-500 text-xs mt-1">{{ form.email.errors|striptags }}</p>
-                {% endif %}
-            </div>
-            {% endif %}
+            <!-- Email field removed: not used in model or UI -->
 
             <!-- Password Field -->
             <div class="space-y-2">

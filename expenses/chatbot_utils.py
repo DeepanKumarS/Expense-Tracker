@@ -43,7 +43,7 @@ def process_chat_query(user, query: str):
                     .annotate(total=Sum('amount'))
                     .order_by('-total'))
         lines = [f"{x['category']}: ₹{x['total']}" for x in by_cat]
-        return "\n".join(lines)
+        return r"<br>".join(lines)
     else:
         # Default fallback
         return "I can help with queries like 'Show food expenses this month' or 'Total travel expenses today'."
